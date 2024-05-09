@@ -2117,7 +2117,11 @@ void M_Init (void)
     // (should crash if missing).
     if (gameversion < exe_ultimate)
     {
-	EpiDef.numitems--;
+	    EpiDef.numitems = ep_end - 1;
+    }
+    else
+    {
+        EpiDef.numitems = ep_end;
     }
 
     //opldev = M_CheckParm("-opldev") > 0;
