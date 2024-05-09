@@ -62,7 +62,7 @@ extern "C" unsigned int __cdecl HackEntryPoint(unsigned int event, unsigned int*
 		void** newfmv_ptr = (void**)&newfmv;
 		if (MH_CreateHook(playfmv, *newfmv_ptr, &FakePresentationManager::original) != MH_OK)
 		{
-			printf(L"WAD Support: Did create the PlayFMV Hook\n");
+			printf(L"WAD Support: Did not create the PlayFMV Hook\n");
 			return 1;
 		}
 		if (MH_EnableHook(playfmv) != MH_OK)
