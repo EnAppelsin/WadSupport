@@ -28,14 +28,22 @@ unless explicitly done so.
 - Reading an IWAD from the SHAR VFS (including Mod Launcher mods!)
 - Respects the "No Audio" Hack
 
-## Limitations (That are planned to be fixed)
+## Limitations
 
 - Mouse is not supported
 - PWADs are not supported yet because PlayFMV can only accept an 8.3 file name.
 - The controls are the default DOOM controls. In theory you can edit the doom config file to remap them (or use chocolate-setup I think)
 - The DOOM files (saves and config) are put in the SHAR folder (probably UAC virtualised)
-
-## Other Limitations
-
 - DOOM doesn't really clean up properly because it's expecting the EXE to end. This means some memory leaks every time you quit DOOM in SHAR.
   If you reload DOOM a lot you might crash SHAR or something, but really you did it to yourself
+- Likewise, relaunching DOOM may cause oddities as not everything is reset properly (lots of static stuff)
+
+## Code Credits
+
+- doomgeneric by ozkl
+    - Chocolate Doom by Simon Howard
+    - DOOM by Id Software
+- SDL2 by the Sam Lantinga, SDL Community
+- minhook by Tsuda Kageyu
+- libpng by the PNG Development Group
+- zlib by Jean-loup Gailly and Mark Adler
