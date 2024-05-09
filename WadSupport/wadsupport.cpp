@@ -42,12 +42,13 @@ extern "C" unsigned int __cdecl HackEntryPoint(unsigned int event, unsigned int*
 	if (event == 1 && data == 0)
 	{
 		InitialiseHack();
+		IdentifySharVersion();
 		debug_printf(L"WAD Support: Entry point reached %d %p\n", event, data);
 		SDL_version linked;
 		SDL_GetVersion(&linked);
 		printf(L"WAD Support: Audio using SDL Version: %u.%u.%u.\n", linked.major, linked.minor, linked.patch);
 
-		void* playfmv = (void*)0x00465410;
+		void* playfmv = GetPlayFMV_Ptr();
 		FakePresentationManager::original = 0;
 
 		if (MH_Initialize() != MH_OK)

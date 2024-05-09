@@ -1,5 +1,6 @@
 #include "pch.h"
 
+#include "HackFunctions.h"
 #include "Shar.h"
 #include "Rad_RadFile.h"
 
@@ -7,15 +8,25 @@
 
 static int SharVersion = 0;
 
+inline static void* Choose(unsigned int rel0, unsigned int rel1, unsigned int rel2, unsigned int rel3)
+{
+	void* releases[] = { (void*)rel0, (void*)rel1, (void*)rel2, (void*)rel3 };
+	return releases[SharVersion];
+}
+
 void IdentifySharVersion()
 {
-	// Do something here to find the version of SHAR
-	SharVersion = 0;
+	SharVersion = Hack_GameRelease();
+}
+
+void* GetPlayFMV_Ptr()
+{
+	return Choose(0x00465410, 0, 0, 0);
 }
 
 void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write, int flags, int priority, unsigned int cachesize, int allocator, int cacheSpace)
 {
-	void* funcptr = (void*)0x562b46;
+	void* funcptr = Choose(0x562b46, 0, 0, 0);
 	int writeInt = write;
 	__asm
 	{
@@ -34,19 +45,19 @@ void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write,
 
 HWND Win32_GetHwnd()
 {
-	HWND* wndptr = (HWND*)0x006c89bc;
+	HWND* wndptr = (HWND*)Choose(0x006c89bc, 0, 0, 0);
 	return *wndptr;
 }
 
 void* SoundManager_Get()
 {
-	void** sndmgr_ptr = (void**)0x006c8590;
+	void** sndmgr_ptr = (void**)Choose(0x006c8590, 0, 0, 0);
 	return *sndmgr_ptr;
 }
 
 void SoundManager_StopForMovie(void* sndmgr)
 {
-	void* funcptr = (void*)0x4c2500;
+	void* funcptr = Choose(0x4c2500, 0, 0, 0);
 	__asm
 	{
 		mov edi, sndmgr
@@ -56,7 +67,7 @@ void SoundManager_StopForMovie(void* sndmgr)
 
 void SoundManager_ResumeAfterMovie(void* sndmgr)
 {
-	void* funcptr = (void*)0x4c2540;
+	void* funcptr = Choose(0x4c2540, 0, 0, 0);
 	__asm
 	{
 		mov esi, sndmgr
@@ -66,7 +77,7 @@ void SoundManager_ResumeAfterMovie(void* sndmgr)
 
 bool SoundManager_IsStoppedForMovie(void* sndmgr)
 {
-	void* funcptr = (void*)0x4c2570;
+	void* funcptr = Choose(0x4c2570, 0, 0, 0);
 	int rv;
 	__asm
 	{
@@ -79,7 +90,7 @@ bool SoundManager_IsStoppedForMovie(void* sndmgr)
 
 void SoundManager_Update(void* sndmgr)
 {
-	void* funcptr = (void*)0x4c18f0;
+	void* funcptr = Choose(0x4c18f0, 0, 0, 0);
 	__asm
 	{
 		mov edi, sndmgr
@@ -94,7 +105,7 @@ void SoundManager_UpdateOncePerFrame(void* sndmgr, unsigned int elapsedTime, int
 	// contect (0xc)
 	// sndmgr
 	// eax = elapsedTime
-	void* funcptr = (void*)0x4c1940;
+	void* funcptr = Choose(0x4c1940, 0, 0, 0);
 	int intIPFE = isPausedForErrors;
 	int intUC = useContext;
 	__asm
@@ -110,7 +121,7 @@ void SoundManager_UpdateOncePerFrame(void* sndmgr, unsigned int elapsedTime, int
 
 void radMovieService2()
 {
-	void* funcptr = (void*)0x55e760;
+	void* funcptr = Choose(0x55e760, 0, 0, 0);
 	__asm
 	{
 		call funcptr
@@ -119,7 +130,7 @@ void radMovieService2()
 
 void radFileService()
 {
-	void* funcptr = (void*)0x567ded;
+	void* funcptr = Choose(0x567ded, 0, 0, 0);
 	__asm
 	{
 		call funcptr

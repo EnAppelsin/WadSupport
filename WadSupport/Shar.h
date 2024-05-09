@@ -2,6 +2,7 @@
 
 void IdentifySharVersion();
 
+void* GetPlayFMV_Ptr();
 HWND Win32_GetHwnd();
 
 void* SoundManager_Get();
