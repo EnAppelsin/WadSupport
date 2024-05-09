@@ -239,7 +239,7 @@ enum
     main_end
 } main_e;
 
-menuitem_t MainMenu[]=
+menuitem_t MainMenuOrig[]=
 {
     {1,"M_NGAME",M_NewGame,'n'},
     {1,"M_OPTION",M_Options,'o'},
@@ -250,7 +250,9 @@ menuitem_t MainMenu[]=
     {1,"M_QUITG",M_QuitDOOM,'q'}
 };
 
-menu_t  MainDef =
+menuitem_t MainMenu[_countof(MainMenuOrig)];
+
+menu_t MainDefOrig =
 {
     main_end,
     NULL,
@@ -259,6 +261,8 @@ menu_t  MainDef =
     97,64,
     0
 };
+
+menu_t MainDef;
 
 
 //
@@ -2091,6 +2095,9 @@ void M_Init (void)
     //  like HELP1/2, and four episodes.
 
   
+    MainDef = MainDefOrig;
+    memcpy(MainMenu, MainMenuOrig, sizeof(MainMenuOrig));
+
     switch ( gamemode )
     {
       case commercial:
