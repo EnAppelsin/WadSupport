@@ -10,6 +10,13 @@ namespace rad
 		radMemoryMain = 1
 	};
 
+	enum class FileFlags : int
+	{
+		OpenExisting = 0,
+		OpenOrCreate = 1,
+		AlwaysCreate = 3,
+	};
+
 	class IRadFile : public IRefCount
 	{
 	public:
@@ -28,5 +35,5 @@ namespace rad
 		virtual void CommitSync(void) = 0;
 	};
 
-	void FileOpenSync(IRadFile** pFile, const char* pFileName, bool write = false, int flags = 0, int priority = 1, unsigned int cachesize = 0, int allocator = 1, int cacheSpace = 1);
+	void FileOpenSync(IRadFile** pFile, const char* pFileName, bool write = false, FileFlags flags = FileFlags::OpenExisting, int priority = 1, unsigned int cachesize = 0, int allocator = 1, int cacheSpace = 1);
 }

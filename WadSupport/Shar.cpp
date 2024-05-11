@@ -24,7 +24,7 @@ void* GetPlayFMV_Ptr()
 	return Choose(0x465410, 0x4653d0, 0x4653d0, 0x46540);
 }
 
-void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write, int flags, int priority, unsigned int cachesize, int allocator, int cacheSpace)
+void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write, FileFlags flags, int priority, unsigned int cachesize, int allocator, int cacheSpace)
 {
 	void* funcptr = Choose(0x562b46, 0x562b06, 0x562b06, 0x562b3e);
 	int writeInt = write;
@@ -117,6 +117,38 @@ void SoundManager_UpdateOncePerFrame(void* sndmgr, unsigned int elapsedTime, int
 		mov eax, elapsedTime
 		call funcptr
 	}
+}
+
+bool SoundManager_IsMuted(void* sndmgr)
+{
+	char* ptr = (char*)sndmgr + 0x48;
+	return *ptr != 0;
+}
+
+void* SoundTuner_Get()
+{
+	char** srmip = (char**)Choose(0x6c8554, 0x6c8514, 0x6c8514, 0x6c854c);
+	char* srmi = *srmip;
+	char** tuner = (char**)(srmi + 0x34);
+	return (void *)*tuner;
+}
+
+float SoundTuner_GetMasterVolume(void* tuner)
+{
+	float* masterVolume = (float*)((char*)tuner + 0x118);
+	return *masterVolume;
+}
+
+float SoundTuner_GetMusicVolume(void* tuner)
+{
+	float* musicVolume = (float*)((char*)tuner + 0x124);
+	return *musicVolume;
+}
+
+float SoundTuner_GetSfxVolume(void* tuner)
+{
+	float* sfxVolume = (float*)((char*)tuner + 0x11c);
+	return *sfxVolume;
 }
 
 void radMovieService2()
