@@ -247,6 +247,7 @@
     <ClCompile Include="w_file_callback.c" />
     <ClCompile Include="w_file_stdc.c" />
     <ClCompile Include="w_main.c" />
+    <ClCompile Include="w_merge.c" />
     <ClCompile Include="w_wad.c" />
     <ClCompile Include="z_zone.c" />
   </ItemGroup>

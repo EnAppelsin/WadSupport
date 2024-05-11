@@ -276,6 +276,9 @@
     <ClCompile Include="w_file_callback.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="w_merge.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
