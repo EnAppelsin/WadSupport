@@ -59,6 +59,9 @@
     <ClCompile Include="SharDoomIo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SharLibcIo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="meta.ini" />

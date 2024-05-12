@@ -33,6 +33,27 @@ namespace rad
 		virtual void GetPositionSync(unsigned int* pPosition) = 0;
 		virtual void GetSizeSync(unsigned int* pSize) = 0;
 		virtual void CommitSync(void) = 0;
+
+		virtual unsigned int GetSize() = 0;		
+		virtual unsigned int GetSectorSize() = 0;
+
+		virtual void Filler1() = 0;
+		virtual void Filler2() = 0;
+		virtual void Filler3() = 0;
+		virtual void Filler4() = 0;
+		virtual void Filler5() = 0;
+		virtual void Filler6() = 0;
+		
+		virtual bool IsOpen() = 0;
+		virtual const char* GetFilename() = 0;
+		virtual const char* GetDrivename() = 0;
+
+		virtual void Filler7() = 0;
+		virtual void Filler8() = 0;
+		virtual void Filler9() = 0;
+		virtual void Filler10() = 0;
+
+		virtual unsigned int GetHandle() = 0;
 	};
 
 	void FileOpenSync(IRadFile** pFile, const char* pFileName, bool write = false, FileFlags flags = FileFlags::OpenExisting, int priority = 1, unsigned int cachesize = 0, int allocator = 1, int cacheSpace = 1);

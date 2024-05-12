@@ -7,6 +7,7 @@
 #include "Rad_RadFile.h"
 #include "resource1.h"
 #include <stdio.h>
+#include <filesystem>
 #include <SDL.h>
 #include <vector>
 
@@ -35,11 +36,15 @@ public:
 
 void* FakePresentationManager::original = 0;
 
-extern "C"  __declspec(dllexport)  unsigned int __cdecl HackEntryPoint(unsigned int, unsigned int*);
+extern "C"  __declspec(dllexport)  unsigned int __cdecl HackEntryPoint(HackEvent, void*);
 
-extern "C" unsigned int __cdecl HackEntryPoint(unsigned int event, unsigned int* data)
+extern "C" unsigned int __cdecl HackEntryPoint(HackEvent event, void* data)
 {
-	if (event == 1 && data == 0)
+	if (Hack_Printf != 0)
+	{
+		debug_printf(L"HackEntryPoint(%d, %p)\n", event, data);
+	}
+	if (event == HackEvent::InstallHacks)
 	{
 		InitialiseHack();
 		IdentifySharVersion();
@@ -75,6 +80,37 @@ extern "C" unsigned int __cdecl HackEntryPoint(unsigned int event, unsigned int*
 
 		debug_printf(L"Mod Launcher Game ID: %d\n", Hack_GameRelease());
 		debug_printf(L"Is NoAudioLoaded?: %d\n", Hack_IsHackLoaded(L"NoAudio"));
+	}
+	else if (event == HackEvent::Process && DG_ConfigDir == NULL)
+	{
+		debug_printf(L"WAD Support: Discovering savedata directory\n");
+		// Try to discover the directory for SavedGames in a stupid way, we will put a blank file there and try to open it
+		// Then we get the handle
+		// In the future we might reuse this to store something idk
+		rad::IRadFile* file = nullptr;
+		rad::FileOpenSync(&file, "/UserData/SavedGames/wadsupport.ini", true, rad::FileFlags::OpenOrCreate);
+		if (file)
+		{
+			const char* fname = file->GetFilename();
+			const char* dname = file->GetDrivename();
+			//unsigned int handle = file->GetHandle();
+			HANDLE handle = *((HANDLE*)((char*)file + 0x154));
+			debug_printf(L"SHAR I/O Test: (%S, %S, %x)\n", fname, dname, handle);
+			// No idea if this is always the case
+			char* lucas_cstream = *((char**)((char*)handle + 0x08));
+			handle = *((HANDLE*)(lucas_cstream + 0x28));
+			wchar_t fpath[256] = { 0 };
+			DWORD rv = GetFinalPathNameByHandle((HANDLE)handle, fpath, 256, 0);
+			debug_printf(L"WinAPI Path: %s\n", fpath);
+			// it's in experimental because I guess VS2017 because of minhook, ugh
+			std::experimental::filesystem::path p(&fpath[4]);
+			p.remove_filename();
+			printf(L"WAD Support: Saving data in: %s\n", p.wstring().c_str());
+			DG_ConfigDir = new char[p.string().length() + 1];
+			strcpy_s(DG_ConfigDir, p.string().length() + 1, p.string().c_str());
+			
+			file->Release();
+		}
 	}
 	return 0;
 }
@@ -125,7 +161,7 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 		args.push_back("doom");
 		args.push_back("-iwad");
 		args.push_back(std::string("wads\\") + fileName);
-		if (Hack_IsHackLoaded(L"NoAudio"))
+		if (Hack_IsHackLoaded(L"NoAudio") || SoundManager_IsMuted(smgr))
 		{
 			args.push_back("-nosound");
 		}
