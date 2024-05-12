@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 
+#include "dg_libc.h"
 #include "z_zone.h"
 
 #include "m_misc.h"
@@ -510,7 +511,7 @@ WI_drawOnLnode
     else
     {
 	// DEBUG
-	printf("Could not place patch on level %d", n+1); 
+		DG_printf("Could not place patch on level %d", n+1);
     }
 }
 

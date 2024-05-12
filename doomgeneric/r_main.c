@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-
+#include "dg_libc.h"
 #include "doomdef.h"
 #include "d_loop.h"
 
@@ -767,21 +767,21 @@ void R_ExecuteSetViewSize (void)
 void R_Init (void)
 {
     R_InitData ();
-    printf (".");
+    DG_printf (".");
     R_InitPointToAngle ();
-    printf (".");
+    DG_printf (".");
     R_InitTables ();
     // viewwidth / viewheight / detailLevel are set by the defaults
-    printf (".");
+    DG_printf (".");
 
     R_SetViewSize (screenblocks, detailLevel);
     R_InitPlanes ();
-    printf (".");
+    DG_printf (".");
     R_InitLightTables ();
-    printf (".");
+    DG_printf (".");
     R_InitSkyMap ();
     R_InitTranslationTables ();
-    printf (".");
+    DG_printf (".");
 	
     framecount = 0;
 }

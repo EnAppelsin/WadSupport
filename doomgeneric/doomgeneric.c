@@ -3,6 +3,7 @@
 #include "m_argv.h"
 
 #include "doomgeneric.h"
+#include "w_wad.h"
 
 pixel_t* DG_ScreenBuffer = NULL;
 int DG_Exited = 0;
@@ -29,3 +30,7 @@ void doomgeneric_Create(int argc, char **argv)
 	D_DoomMain ();
 }
 
+void doomgeneric_Shutdown()
+{
+	W_CleanupHashTable();
+}

@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="HackFunctions.h" />
+    <ClInclude Include="SharLibcio.h" />
     <ClInclude Include="Rad_RadFile.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Rad_IRefCount.h" />

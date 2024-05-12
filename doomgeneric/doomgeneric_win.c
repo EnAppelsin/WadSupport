@@ -216,7 +216,7 @@ void DG_SetHwnd(void* hwnd)
 	s_Hwnd = (HWND)hwnd;
 	s_Hdc = GetDC(s_Hwnd);
 	GetWindowTextA(s_Hwnd, hwnd_oldTitle, 256);
-	hwnd_originalWndProc = SetWindowLongPtrA(s_Hwnd, GWLP_WNDPROC, wndProc);
+	hwnd_originalWndProc = SetWindowLongPtrA(s_Hwnd, GWLP_WNDPROC, (LONG_PTR)wndProc);
 }
 
 void DG_RestoreHwnd()

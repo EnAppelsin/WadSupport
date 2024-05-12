@@ -6,6 +6,7 @@
 #include "SharDoomIo.h"
 #include "Rad_RadFile.h"
 #include "resource1.h"
+#include "SharLibcio.h"
 #include <stdio.h>
 #include <filesystem>
 #include <sstream>
@@ -217,6 +218,7 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 #endif
 
 		// Preinit DOOM stuff
+		SharLibcInstall();
 		DG_SetHwnd(Win32_GetHwnd());
 		DG_LoadFrame(frameMemory, frameSize);
 		DG_IOCallbacks(SharDoomOpen, SharDoomClose, SharDoomRead);
@@ -228,6 +230,7 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 		{
 			doomgeneric_Tick();
 		}
+		doomgeneric_Shutdown();
 		// This doesn't cleanup everything (or get close) so someone who plays a lot of DOOM in SHAR 
 		// may eventually leak too much to continue.
 		// I don't think this is a practical problem

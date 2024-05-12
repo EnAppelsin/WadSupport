@@ -25,6 +25,7 @@
 #include <SDL_mixer.h>
 
 #include "config.h"
+#include "dg_libc.h"
 #include "doomtype.h"
 #include "memio.h"
 #include "mus2mid.h"
@@ -416,7 +417,7 @@ static char *GetSubstituteMusicFile(void *data, size_t data_len)
     sha1_context_t context;
     sha1_digest_t hash;
     char *filename;
-    int i;
+    unsigned int i;
 
     // Don't bother doing a hash if we're never going to find anything.
     if (subst_music_len == 0)
@@ -688,7 +689,7 @@ static void LoadSubstituteConfigs(void)
 
     if (subst_music_len > 0)
     {
-        printf("Loaded %i music substitutions from config files.\n",
+        DG_printf("Loaded %i music substitutions from config files.\n",
                subst_music_len);
     }
 }
@@ -728,7 +729,7 @@ static void DumpSubstituteConfig(char *filename)
     char name[9];
     byte *data;
     FILE *fs;
-    int lumpnum, h;
+    unsigned int lumpnum, h;
 
     fs = fopen(filename, "w");
 
@@ -770,7 +771,7 @@ static void DumpSubstituteConfig(char *filename)
     fprintf(fs, "\n");
     fclose(fs);
 
-    printf("Substitute MIDI config file written to %s.\n", filename);
+    DG_printf("Substitute MIDI config file written to %s.\n", filename);
     I_Quit();
 }
 

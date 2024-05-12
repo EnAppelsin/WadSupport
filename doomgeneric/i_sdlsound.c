@@ -188,7 +188,7 @@ static void ReserveCacheSpace(size_t len)
     // Keep freeing sound effects that aren't currently being played,
     // until there is enough space for the new sound.
 
-    while (allocated_sounds_size + len > snd_cachesize)
+    while (allocated_sounds_size + (int)len > snd_cachesize)
     {
         // Free a sound.  If there is nothing more to free, stop.
 
@@ -533,7 +533,7 @@ static boolean ExpandSoundData_SDL(sfxinfo_t *sfxinfo,
                                    int samplerate,
                                    int length)
 {
-    SDL_AudioCVT convertor;
+    //SDL_AudioCVT convertor;
     Mix_Chunk *chunk;
     uint32_t expanded_length;
  
@@ -557,7 +557,7 @@ static boolean ExpandSoundData_SDL(sfxinfo_t *sfxinfo,
     // If we can, use the standard / optimized SDL conversion routines.
         Sint16 *expanded = (Sint16 *) chunk->abuf;
         int expand_ratio;
-        int i;
+        unsigned int i;
 
         // Generic expansion if conversion does not work:
         //

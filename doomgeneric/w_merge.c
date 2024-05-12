@@ -24,6 +24,7 @@
 #include <ctype.h>
 
 #include "doomtype.h"
+#include "dg_libc.h"
 #include "i_system.h"
 #include "m_misc.h"
 #include "w_merge.h"
@@ -560,8 +561,8 @@ void W_PrintDirectory(void)
     for (i=0; i<numlumps; ++i)
     {
         for (n=0; n<8 && lumpinfo[i]->name[n] != '\0'; ++n)
-            putchar(lumpinfo[i]->name[n]);
-        putchar('\n');
+            DG_putchar(lumpinfo[i]->name[n]);
+        DG_putchar('\n');
     }
 }
 

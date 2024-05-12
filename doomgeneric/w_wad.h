@@ -56,7 +56,7 @@ struct lumpinfo_s
 extern lumpinfo_t **lumpinfo;
 extern unsigned int numlumps;
 
-wad_file_t *W_AddFile (char *filename);
+wad_file_t *W_AddFile (const char *filename);
 
 lumpindex_t	W_CheckNumForName (char* name);
 lumpindex_t	W_GetNumForName (char* name);
@@ -73,6 +73,8 @@ extern unsigned int W_LumpNameHash(const char *s);
 
 void    W_ReleaseLumpNum(int lump);
 void    W_ReleaseLumpName(char *name);
+
+void W_CleanupHashTable(void);
 
 void W_CheckCorrectIWAD(GameMission_t mission);
 

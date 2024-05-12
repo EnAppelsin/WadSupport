@@ -35,6 +35,7 @@
 #endif
 
 #include "config.h"
+#include "dg_libc.h"
 
 #include "deh_str.h"
 #include "doomtype.h"
@@ -157,7 +158,7 @@ byte *I_ZoneBase (int *size)
 
     zonemem = AutoAllocMemory(size, default_ram, min_ram);
 
-    printf("zone memory: %p, %x allocated for zone\n", 
+    DG_printf("zone memory: %p, %x allocated for zone\n", 
            zonemem, *size);
 
     return zonemem;
@@ -169,9 +170,9 @@ void I_PrintBanner(char *msg)
     int spaces = 35 - (strlen(msg) / 2);
 
     for (i=0; i<spaces; ++i)
-        putchar(' ');
+        DG_putchar(' ');
 
-    puts(msg);
+    DG_puts(msg);
 }
 
 void I_PrintDivider(void)
@@ -180,10 +181,10 @@ void I_PrintDivider(void)
 
     for (i=0; i<75; ++i)
     {
-        putchar('=');
+        DG_putchar('=');
     }
 
-    putchar('\n');
+    DG_putchar('\n');
 }
 
 void I_PrintStartupBanner(char *gamedescription)
@@ -192,7 +193,7 @@ void I_PrintStartupBanner(char *gamedescription)
     I_PrintBanner(gamedescription);
     I_PrintDivider();
     
-    printf(
+    DG_printf(
     " " PACKAGE_NAME " is free software, covered by the GNU General Public\n"
     " License.  There is NO warranty; not even for MERCHANTABILITY or FITNESS\n"
     " FOR A PARTICULAR PURPOSE. You are welcome to change and distribute\n"

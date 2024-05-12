@@ -26,6 +26,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "dg_libc.h"
 #include "w_wad.h"
 #include "z_zone.h"
 
@@ -249,8 +250,8 @@ boolean GUS_WriteConfig(char *path)
 
     if (!strcmp(gus_patch_path, ""))
     {
-        printf("You haven't configured gus_patch_path.\n");
-        printf("gus_patch_path needs to point to the location of "
+        DG_printf("You haven't configured gus_patch_path.\n");
+        DG_printf("gus_patch_path needs to point to the location of "
                "your GUS patch set.\n"
                "To get a copy of the \"standard\" GUS patches, "
                "download a copy of dgguspat.zip.\n");

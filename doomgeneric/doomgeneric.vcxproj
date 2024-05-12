@@ -163,6 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c" />
+    <ClCompile Include="dg_libc.c" />
     <ClCompile Include="doomdef.c" />
     <ClCompile Include="doomgeneric.c" />
     <ClCompile Include="doomgeneric_win.c" />
@@ -257,6 +258,7 @@
     <ClInclude Include="deh_main.h" />
     <ClInclude Include="deh_misc.h" />
     <ClInclude Include="deh_str.h" />
+    <ClInclude Include="dg_libc.h" />
     <ClInclude Include="doom.h" />
     <ClInclude Include="doomdata.h" />
     <ClInclude Include="doomdef.h" />

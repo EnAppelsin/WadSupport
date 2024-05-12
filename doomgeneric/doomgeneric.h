@@ -43,6 +43,7 @@ void DG_SetHwnd(void* hwnd);
 void DG_RestoreHwnd();
 void DG_LoadFrame(void* buffer, int size);
 
+void doomgeneric_Shutdown();
 void DG_Cleanup();
 
 typedef void* (*callback_open_t)(char* path, unsigned int* length);

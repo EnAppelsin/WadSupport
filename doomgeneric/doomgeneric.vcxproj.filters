@@ -279,6 +279,9 @@
     <ClCompile Include="w_merge.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dg_libc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
@@ -570,6 +573,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mus2mid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dg_libc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

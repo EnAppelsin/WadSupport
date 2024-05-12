@@ -1,13 +1,25 @@
 #include "pch.h"
 #include "Rad_RadFile.h"
 #include "HackFunctions.h"
+#include "SharLibcio.h"
 #include <cassert>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
 
+extern "C" {
+#include <dg_libc.h>
+}
+
 // Libc-Style Functions that use Shar/Hack Functions
 // Used to override some stuff in Doom
+
+void SharLibcInstall()
+{
+	DG_putchar = SharPutchar;
+	DG_puts = SharPuts;
+	DG_printf = SharPrintf;
+}
 
 static void SharPutLine(char const* msg)
 {
@@ -19,31 +31,38 @@ static void SharPutLine(char const* msg)
 	delete[] wcstring;
 }
 
-static char LineBuf[80];
+static char LineBuf[81];
 static int LineBufPos = 0;
 
-void SharPutc(char msg)
+int SharPutchar(int msg)
 {
-	if (msg == '\n' || LineBufPos == 80) {
+	if (LineBufPos == 80) {
 		SharPutLine(LineBuf);
 		LineBufPos = 0;
 		LineBuf[0] = '\0';
 	}
 	LineBuf[LineBufPos++] = msg;
 	LineBuf[LineBufPos] = '\0';
+	if (msg == '\n') {
+		SharPutLine(LineBuf);
+		LineBufPos = 0;
+		LineBuf[0] = '\0';
+	}
+	return 1;
 }
 
-void SharPuts(const char* msg)
+int SharPuts(const char* msg)
 {
 	int len = strlen(msg);
 	for (int i = 0; i < len; i++)
 	{
-		SharPutc(msg[i]);
+		SharPutchar(msg[i]);
 	}
-	SharPutc('\n');
+	SharPutchar('\n');
+	return len;
 }
 
-void SharPrintf(const char* format, ...)
+int SharPrintf(const char* format, ...)
 {
 	va_list args;
 	va_start(args, format);
@@ -52,6 +71,7 @@ void SharPrintf(const char* format, ...)
 	vsprintf_s(buffer, len, format, args);
 	SharPutLine(buffer);
 	delete[] buffer;
+	return len;
 }
 
 struct SharLibcFile

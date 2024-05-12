@@ -21,6 +21,8 @@
 
 #include "doomfeatures.h"
 
+#include "dg_libc.h"
+
 #include "d_event.h"
 #include "d_loop.h"
 #include "d_ticcmd.h"
@@ -260,7 +262,7 @@ static void D_Disconnected(void)
 
     // disconnected from server
 
-    printf("Disconnected from server.\n");
+    DG_printf("Disconnected from server.\n");
 }
 
 //

@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "doomtype.h"
+#include "dg_libc.h"
 
 #include "config.h"
 #include "d_iwad.h"
@@ -101,7 +102,7 @@ unsigned int W_LumpNameHash(const char* s)
 // Other files are single lumps with the base filename
 //  for the lump name.
 
-wad_file_t* W_AddFile(char* filename)
+wad_file_t* W_AddFile(const char* filename)
 {
     wadinfo_t header;
     lumpindex_t i;
@@ -137,7 +138,7 @@ wad_file_t* W_AddFile(char* filename)
 
     if (wad_file == NULL)
     {
-        printf(" couldn't open %s\n", filename);
+        DG_printf(" couldn't open %s\n", filename);
         return NULL;
     }
 
@@ -203,7 +204,7 @@ wad_file_t* W_AddFile(char* filename)
 
     filerover = fileinfo;
 
-    for (i = startlump; i < numlumps; ++i)
+    for (i = startlump; i < (int)numlumps; ++i)
     {
         lumpinfo_t* lump_p = &filelumps[i - startlump];
         lump_p->wad_file = wad_file;
@@ -322,7 +323,7 @@ lumpindex_t W_GetNumForName(char* name)
 //
 int W_LumpLength(lumpindex_t lump)
 {
-    if (lump >= numlumps)
+    if (lump >= (int)numlumps)
     {
         I_Error("W_LumpLength: %i >= numlumps", lump);
     }
@@ -342,7 +343,7 @@ void W_ReadLump(lumpindex_t lump, void* dest)
     int c;
     lumpinfo_t* l;
 
-    if (lump >= numlumps)
+    if (lump >= (int)numlumps)
     {
         I_Error("W_ReadLump: %i >= numlumps", lump);
     }
@@ -548,12 +549,12 @@ void W_GenerateHashTable(void)
     {
         lumphash = Z_Malloc(sizeof(lumpindex_t) * numlumps, PU_STATIC, NULL);
 
-        for (i = 0; i < numlumps; ++i)
+        for (i = 0; i < (int)numlumps; ++i)
         {
             lumphash[i] = -1;
         }
 
-        for (i = 0; i < numlumps; ++i)
+        for (i = 0; i < (int)numlumps; ++i)
         {
             unsigned int hash;
 
@@ -567,6 +568,33 @@ void W_GenerateHashTable(void)
     }
 
     // All done!
+}
+
+void W_CleanupHashTable(void)
+{
+
+    if (lumphash != NULL)
+    {
+        Z_Free(lumphash);
+        lumphash = NULL;
+    }
+    if (lumpinfo)
+    {
+        free(lumpinfo);
+        lumpinfo = 0;
+    }
+    numlumps = 0;
+    reloadhandle = NULL;
+    if (reloadlumps)
+    {
+        free(reloadlumps);
+        reloadlumps = NULL;
+    }
+    if (reloadname)
+    {
+        reloadname = NULL;
+    }
+    reloadlump = -1;
 }
 
 // The Doom reload hack. The idea here is that if you give a WAD file to -file
@@ -586,7 +614,7 @@ void W_Reload(void)
     }
 
     // We must free any lumps being cached from the PWAD we're about to reload:
-    for (i = reloadlump; i < numlumps; ++i)
+    for (i = reloadlump; i < (int)numlumps; ++i)
     {
         if (lumpinfo[i]->cache != NULL)
         {

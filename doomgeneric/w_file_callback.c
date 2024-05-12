@@ -31,7 +31,7 @@ typedef struct
 extern wad_file_class_t callback_wad_file;
 int callback_valid = 0;
 
-typedef void* (*callback_open_t)(char* path, unsigned int* length);
+typedef void* (*callback_open_t)(const char* path, unsigned int* length);
 typedef void (*callback_close_t)(void* user);
 typedef int (*callback_read_t)(void* user, unsigned int offset, void* buffer, size_t bufferlen);
 
@@ -52,7 +52,7 @@ void DG_IOCallbacks(callback_open_t o, callback_close_t c, callback_read_t r)
     }
 }
 
-static wad_file_t *W_Callback_OpenFile(char *path)
+static wad_file_t *W_Callback_OpenFile(const char *path)
 {
     callback_wad_file_t *result;
     void* user;

@@ -36,6 +36,7 @@
 #include <sys/types.h>
 #endif
 
+#include "dg_libc.h"
 #include "doomtype.h"
 
 #include "deh_str.h"
@@ -195,10 +196,10 @@ boolean M_StrToInt(const char *str, int *result)
         || sscanf(str, " %d", result) == 1;
 }
 
-void M_ExtractFileBase(char *path, char *dest)
+void M_ExtractFileBase(const char *path, char *dest)
 {
-    char *src;
-    char *filename;
+    const char *src;
+    char const *filename;
     int length;
 
     src = path + strlen(path) - 1;
@@ -223,7 +224,7 @@ void M_ExtractFileBase(char *path, char *dest)
     {
         if (length >= 8)
         {
-            printf("Warning: Truncated '%s' lump name to '%.8s'.\n",
+            DG_printf("Warning: Truncated '%s' lump name to '%.8s'.\n",
                    filename, dest);
             break;
         }
@@ -495,7 +496,7 @@ int M_vsnprintf(char *buf, size_t buf_len, const char *s, va_list args)
 
     // If truncated, change the final char in the buffer to a \0.
     // A negative result indicates a truncated buffer on Windows.
-    if (result < 0 || result >= buf_len)
+    if (result < 0 || result >= (int)buf_len)
     {
         buf[buf_len - 1] = '\0';
         result = buf_len - 1;

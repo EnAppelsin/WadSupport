@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 
+#include "dg_libc.h"
 #include "doomfeatures.h"
 
 #include "d_main.h"
@@ -107,7 +108,7 @@ static loop_interface_t doom_loop_interface = {
 
 static void LoadGameSettings(net_gamesettings_t *settings)
 {
-    unsigned int i;
+    int i;
 
     deathmatch = settings->deathmatch;
     startepisode = settings->episode;
@@ -123,7 +124,7 @@ static void LoadGameSettings(net_gamesettings_t *settings)
 
     if (lowres_turn)
     {
-        printf("NOTE: Turning resolution is reduced; this is probably "
+        DG_printf("NOTE: Turning resolution is reduced; this is probably "
                "because there is a client recording a Vanilla demo.\n");
     }
 
@@ -273,8 +274,8 @@ void D_CheckNetGame (void)
         {
             DEH_printf("Levels will end after %d minute", timelimit);
             if (timelimit > 1)
-                printf("s");
-            printf(".\n");
+                DG_printf("s");
+            DG_printf(".\n");
         }
     }
 }
