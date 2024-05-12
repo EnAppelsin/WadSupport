@@ -39,10 +39,12 @@ extern "C"  __declspec(dllexport)  unsigned int __cdecl HackEntryPoint(HackEvent
 
 extern "C" unsigned int __cdecl HackEntryPoint(HackEvent event, void* data)
 {
+#ifdef DEBUG_HACKENTRYPOINT
 	if (Hack_Printf != 0)
 	{
 		debug_printf(L"HackEntryPoint(%d, %p)\n", event, data);
 	}
+#endif
 	if (event == HackEvent::InstallHacks)
 	{
 		InitialiseHack();
