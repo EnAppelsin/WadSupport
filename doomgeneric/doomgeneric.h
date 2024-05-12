@@ -26,6 +26,7 @@ typedef uint32_t pixel_t;
 
 extern pixel_t* DG_ScreenBuffer;
 extern int DG_Exited;
+extern char* DG_ConfigDir;
 
 void doomgeneric_Create(int argc, char **argv);
 void doomgeneric_Tick();

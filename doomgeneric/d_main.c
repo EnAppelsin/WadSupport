@@ -1319,8 +1319,8 @@ void D_DoomMain (void)
 #endif
     {
         // Auto-detect the configuration dir.
-
-        M_SetConfigDir(NULL);
+        extern char* DG_ConfigDir;
+        M_SetConfigDir(DG_ConfigDir);
     }
 
     //!

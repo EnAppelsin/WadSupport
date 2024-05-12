@@ -6,6 +6,7 @@
 
 pixel_t* DG_ScreenBuffer = NULL;
 int DG_Exited = 0;
+char* DG_ConfigDir = NULL;
 
 void M_FindResponseFile(void);
 void D_DoomMain (void);
