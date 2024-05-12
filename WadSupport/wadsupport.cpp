@@ -8,8 +8,10 @@
 #include "resource1.h"
 #include <stdio.h>
 #include <filesystem>
+#include <sstream>
 #include <SDL.h>
 #include <vector>
+#include <cassert>
 
 extern HMODULE dllHandle;
 
@@ -128,7 +130,9 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 	}
 	debug_printf(L"WAD Support: PlayFMV(%S, %p, %d, %d, %d)\n", fileName, callback, skip, stop, local);
 
-	if (strstr(fileName, ".wad"))
+	const char* wadfile = strstr(fileName, ".wad");
+	const char* dclfile = strstr(fileName, ".dcl");
+	if (wadfile || dclfile)
 	{
 		// It's DOOMing time!
 		// TODO: SHAR sets a flag in the FMV player for some gag related reason
@@ -160,11 +164,43 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 		std::string full_cmd = "";
 #endif
 		args.push_back("doom");
-		args.push_back("-iwad");
-		args.push_back(std::string("wads\\") + fileName);
 		if (Hack_IsHackLoaded(L"NoAudio") || SoundManager_IsMuted(smgr))
 		{
 			args.push_back("-nosound");
+		}
+		// If its a .wad we just load it as an IWAD
+		if (wadfile)
+		{
+			args.push_back("-iwad");
+			args.push_back(std::string("wads\\") + fileName);
+		}
+		// If we're a .dcl we will read it to generate the command line arguments
+		else
+		{
+			rad::IRadFile* dcl = 0;
+			std::string dclpath = "wads\\";
+			dclpath += fileName;
+			rad::FileOpenSync(&dcl, dclpath.c_str());
+			unsigned int size = 0;
+			dcl->GetSizeSync(&size);
+			assert(size > 0 && size < 65535);
+			char* buf = new char[size];
+			dcl->ReadSync(buf, size);
+			dcl->Release();
+			std::stringstream sbuf;
+			sbuf.write(buf, size);
+			delete[] buf;
+			while (sbuf.good())
+			{
+				std::string line;
+				std::getline(sbuf, line);
+				line.erase(std::remove_if(line.begin(), line.end(), [](auto ch)
+					{
+						return isprint(ch) == 0;
+					}), line.end());
+				if (line.length())
+					args.push_back(line);
+			}
 		}
 		
 		int argc = args.size();
