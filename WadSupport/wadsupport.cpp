@@ -16,7 +16,6 @@ extern HMODULE dllHandle;
 // DOOM
 extern "C" {
 #include <doomgeneric.h>
-	void DG_SetHwnd(HWND hwnd);
 }
 
 #ifdef _DEBUG
@@ -183,9 +182,6 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 		DG_SetHwnd(Win32_GetHwnd());
 		DG_LoadFrame(frameMemory, frameSize);
 		DG_IOCallbacks(SharDoomOpen, SharDoomClose, SharDoomRead);
-		// Save the window name
-		char oldTitle[256];
-		GetWindowTextA(Win32_GetHwnd(), oldTitle, 256);
 
 		// Create DOOM with our fake command line
 		doomgeneric_Create(argc, const_cast<char**>(argv));
@@ -198,12 +194,12 @@ void FakePresentationManager::PlayFMVOrDoom(void* thisptr, const char* fileName,
 		// may eventually leak too much to continue.
 		// I don't think this is a practical problem
 		debug_printf(L"WAD Support: DOOM loop ended, cleaning up some memory\n");
+		// Restore the HWND
+		DG_RestoreHwnd();
 		DG_Cleanup();
 		// DOOM doesn't close its WAD handles so we force them shut here
 		SharDoomCloseAll();
 
-		// Restore the Window title (back to SHAR)
-		SetWindowTextA(Win32_GetHwnd(), oldTitle);
 
 		// Let SHAR start playing sound again
 		debug_printf(L"WAD Support: Resuming SHAR Audio\n");

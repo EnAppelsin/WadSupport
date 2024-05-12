@@ -16,6 +16,9 @@ static HDC s_HdcFrame = 0;
 static HBITMAP s_HworkingBitmap = 0;
 static HDC s_HdcWorking = 0;
 
+// HWND Hijacking Stuff
+char hwnd_oldTitle[256];
+LONG_PTR hwnd_originalWndProc;
 
 #define KEYQUEUE_SIZE 16
 
@@ -129,9 +132,11 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		PostQuitMessage(0);
 		ExitProcess(0);
 		break;
+	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
 		addKeyToQueue(1, wParam);
 		break;
+	case WM_SYSKEYUP:
 	case WM_KEYUP:
 		addKeyToQueue(0, wParam);
 		break;
@@ -206,10 +211,18 @@ void DG_Cleanup()
 	s_Hwnd = 0;
 }
 
-void DG_SetHwnd(HWND hwnd)
+void DG_SetHwnd(void* hwnd)
 {
-	s_Hwnd = hwnd;
+	s_Hwnd = (HWND)hwnd;
 	s_Hdc = GetDC(s_Hwnd);
+	GetWindowTextA(s_Hwnd, hwnd_oldTitle, 256);
+	hwnd_originalWndProc = SetWindowLongPtrA(s_Hwnd, GWLP_WNDPROC, wndProc);
+}
+
+void DG_RestoreHwnd()
+{
+	SetWindowTextA(s_Hwnd, hwnd_oldTitle);
+	SetWindowLongPtrA(s_Hwnd, GWLP_WNDPROC, hwnd_originalWndProc);
 }
 
 void DG_DrawFrame()
@@ -221,18 +234,6 @@ void DG_DrawFrame()
 	{
 		TranslateMessage(&msg);
 		DispatchMessageA(&msg);
-
-		// Maybe we SetWindowLongPtr to take over SHAR's WndProc?
-		if (msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN) {
-			addKeyToQueue(1, msg.wParam);
-		}
-		else if (msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP) {
-			addKeyToQueue(0, msg.wParam);
-		}
-		else if (msg.message == WM_QUIT) {
-			exit(0);
-			return;
-		}
 	}
 
 	RECT    rcCli;

@@ -39,6 +39,8 @@ void DG_SleepMs(uint32_t ms);
 uint32_t DG_GetTicksMs();
 int DG_GetKey(int* pressed, unsigned char* key);
 void DG_SetWindowTitle(const char * title);
+void DG_SetHwnd(void* hwnd);
+void DG_RestoreHwnd();
 void DG_LoadFrame(void* buffer, int size);
 
 void DG_Cleanup();
