@@ -323,6 +323,17 @@ void I_GetEvent(void)
         }
     }
 
+    int button = 0, xr = 0, yr = 0;
+    DG_GetMouse(&button, &xr, &yr);
+    if (button != 0 || xr != 0 || yr != 0)
+    {
+        event.type = ev_mouse;
+        event.data1 = button;
+        event.data2 = xr;
+        event.data3 = yr;
+        D_PostEvent(&event);
+    }
+
 
                 /*
             case SDL_MOUSEMOTION:

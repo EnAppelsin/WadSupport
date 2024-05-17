@@ -1,10 +1,12 @@
 #include "doomkeys.h"
 
+#include "dg_libc.h"
 #include "doomgeneric.h"
 
 #include <stdio.h>
 
 #include <Windows.h>
+#include <Windowsx.h>
 
 #include <png.h>
 
@@ -16,9 +18,14 @@ static HDC s_HdcFrame = 0;
 static HBITMAP s_HworkingBitmap = 0;
 static HDC s_HdcWorking = 0;
 
+static int mouseKeys = 0;
+static int xrel = 0;
+static int yrel = 0;
+
 // HWND Hijacking Stuff
-char hwnd_oldTitle[256];
-LONG_PTR hwnd_originalWndProc;
+static char hwnd_oldTitle[256];
+static LONG_PTR hwnd_originalWndProc;
+static RECT hwnd_originalClip;
 
 #define KEYQUEUE_SIZE 16
 
@@ -140,6 +147,41 @@ static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 	case WM_KEYUP:
 		addKeyToQueue(0, wParam);
 		break;
+	case WM_MOUSEMOVE:
+		{
+			RECT windowRect;
+			GetWindowRect(s_Hwnd, &windowRect);
+			POINT mousePos;
+			mousePos.x = GET_X_LPARAM(lParam);
+			mousePos.y = GET_Y_LPARAM(lParam);
+			ClientToScreen(s_Hwnd, &mousePos);
+			int xpos = mousePos.x;
+			int ypos = mousePos.y;
+			int xc = (windowRect.left + windowRect.right) / 2;
+			int yc = (windowRect.top + windowRect.bottom) / 2;
+			xrel = xpos - xc;
+			yrel = ypos - yc;
+			SetCursorPos(xc, yc);
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		mouseKeys |= 1;
+		break;
+	case WM_LBUTTONUP:
+		mouseKeys &= ~1;
+		break;
+	case WM_RBUTTONDOWN:
+		mouseKeys |= 2;
+		break;
+	case WM_RBUTTONUP:
+		mouseKeys &= ~2;
+		break;
+	case WM_MBUTTONDOWN:
+		mouseKeys |= 4;
+		break;
+	case WM_MBUTTONUP:
+		mouseKeys &= ~4;
+		break;
 	default:
 		return DefWindowProcA(hwnd, msg, wParam, lParam);
 	}
@@ -217,12 +259,17 @@ void DG_SetHwnd(void* hwnd)
 	s_Hdc = GetDC(s_Hwnd);
 	GetWindowTextA(s_Hwnd, hwnd_oldTitle, 256);
 	hwnd_originalWndProc = SetWindowLongPtrA(s_Hwnd, GWLP_WNDPROC, (LONG_PTR)wndProc);
+	RECT windowRect;
+	GetClipCursor(&hwnd_originalClip);
+	GetWindowRect(s_Hwnd, &windowRect);
+	ClipCursor(&windowRect);
 }
 
 void DG_RestoreHwnd()
 {
 	SetWindowTextA(s_Hwnd, hwnd_oldTitle);
 	SetWindowLongPtrA(s_Hwnd, GWLP_WNDPROC, hwnd_originalWndProc);
+	ClipCursor(&hwnd_originalClip);
 }
 
 void DG_DrawFrame()
@@ -289,6 +336,14 @@ int DG_GetKey(int* pressed, unsigned char* doomKey)
 
 		return 1;
 	}
+}
+
+void DG_GetMouse(int* button_state, int* xr, int* yr)
+{
+	*button_state = mouseKeys;
+	*xr = xrel;
+	// i hate vertical mouse movement :)
+	*yr = 0;
 }
 
 void DG_SetWindowTitle(const char * title)
