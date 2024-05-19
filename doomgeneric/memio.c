@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "dg_libc.h"
 #include "memio.h"
 
 #include "z_zone.h"
