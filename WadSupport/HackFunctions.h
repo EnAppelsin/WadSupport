@@ -79,7 +79,7 @@ enum class HackEvent
 	AspectRatioSupport2,
 	AspectRatioSupport3,
 	PreGuiScreenPhoneBooth,
-	PostGUiScreenPhoneBooth,
+	PostGuiScreenPhoneBooth,
 	Crash,
 	AddHighlights,
 	CustomFilesCreateFile,
