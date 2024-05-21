@@ -68,7 +68,7 @@ enum class HackEvent
 	FrameLimiterImpose,
 	CustomSaveDataAdded,
 	LoadPurchaseMerchant,
-	CanCollisionObjectsCOllide,
+	CanCollisionObjectsCollide,
 	SetupGlobalPedStuff,
 	MissionStageInit,
 	MissionStageUninit,
