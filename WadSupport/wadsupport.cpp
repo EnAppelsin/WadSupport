@@ -38,6 +38,22 @@ public:
 
 void* FakePresentationManager::original = 0;
 
+typedef HANDLE (WINAPI* CreateFileWType)(LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE);
+CreateFileWType CreateFileW_Orig = NULL;
+
+static HANDLE DetourCreateFile_LastHandle = NULL;
+
+HANDLE WINAPI DetourCreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
+	LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
+	HANDLE hTemplateFile)
+{
+	HANDLE h = CreateFileW_Orig(lpFileName, dwDesiredAccess, dwShareMode,
+		lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
+	debug_printf(L"CreateFileW returned %p\n", h);
+	DetourCreateFile_LastHandle = h;
+	return h;
+}
+
 extern "C"  __declspec(dllexport)  unsigned int __cdecl HackEntryPoint(HackEvent, void*);
 
 extern "C" unsigned int __cdecl HackEntryPoint(HackEvent event, void* data)
@@ -74,6 +90,12 @@ extern "C" unsigned int __cdecl HackEntryPoint(HackEvent event, void* data)
 			printf(L"WAD Support: Did not create the PlayFMV Hook\n");
 			return 1;
 		}
+		if (MH_CreateHook(&CreateFileW, &DetourCreateFileW, (void**)&CreateFileW_Orig) != MH_OK)
+		{
+			printf(L"WAD Suppport: Did not create the CreateFileW Hook\n");
+			return 1;
+		}
+
 		if (MH_EnableHook(playfmv) != MH_OK)
 		{
 			printf(L"WAD Support: Did not activate the PlayFMV Hook\n");
@@ -91,18 +113,14 @@ extern "C" unsigned int __cdecl HackEntryPoint(HackEvent event, void* data)
 		// Try to discover the directory for SavedGames in a stupid way, we will put a blank file there and try to open it
 		// Then we get the handle
 		// In the future we might reuse this to store something idk
+		MH_EnableHook(&CreateFileW);
 		rad::IRadFile* file = nullptr;
 		rad::FileOpenSync(&file, "/UserData/SavedGames/wadsupport.ini", true, rad::FileFlags::OpenOrCreate);
 		if (file)
 		{
 			const char* fname = file->GetFilename();
 			const char* dname = file->GetDrivename();
-			//unsigned int handle = file->GetHandle();
-			HANDLE handle = *((HANDLE*)((char*)file + 0x154));
-			debug_printf(L"SHAR I/O Test: (%S, %S, %x)\n", fname, dname, handle);
-			// No idea if this is always the case
-			char* lucas_cstream = *((char**)((char*)handle + 0x08));
-			handle = *((HANDLE*)(lucas_cstream + 0x28));
+			HANDLE handle = DetourCreateFile_LastHandle;
 			wchar_t fpath[256] = { 0 };
 			DWORD rv = GetFinalPathNameByHandle((HANDLE)handle, fpath, 256, 0);
 			debug_printf(L"WinAPI Path: %s\n", fpath);
@@ -115,6 +133,7 @@ extern "C" unsigned int __cdecl HackEntryPoint(HackEvent event, void* data)
 			
 			file->Release();
 		}
+		MH_DisableHook(&CreateFileW);
 	}
 	return 0;
 }
