@@ -8,9 +8,9 @@
 
 static int SharVersion = 0;
 
-inline static void* Choose(unsigned int rel0, unsigned int rel1, unsigned int rel2, unsigned int rel3)
+inline static void* Choose(unsigned int originalEnglish, unsigned int international, unsigned int bestSellerSeries, unsigned int demo)
 {
-	void* releases[] = { (void*)rel0, (void*)rel1, (void*)rel2, (void*)rel3 };
+	void* releases[] = { (void*)originalEnglish, (void*)international, (void*)bestSellerSeries, (void*)demo };
 	return releases[SharVersion];
 }
 
@@ -21,12 +21,12 @@ void IdentifySharVersion()
 
 void* GetPlayFMV_Ptr()
 {
-	return Choose(0x465410, 0x4654c0, 0x465180, 0x464f40);
+	return Choose(0x465410, 0x465180, 0x464F40, 0x4654C0);
 }
 
 void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write, FileFlags flags, int priority, unsigned int cachesize, int allocator, int cacheSpace)
 {
-	void* funcptr = Choose(0x562b46, 0x562b06, 0x562b06, 0x562b3e);
+	void* funcptr = Choose(0x562B46, 0x562FDE, 0x573B7E, 0x562B9E);
 	int writeInt = write;
 	__asm
 	{
@@ -45,19 +45,19 @@ void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write,
 
 HWND Win32_GetHwnd()
 {
-	HWND* wndptr = (HWND*)Choose(0x6c89bc, 0x6c897c, 0x6c897c, 0x6c89b4);
+	HWND* wndptr = (HWND*)Choose(0x6C89BC, 0x6C897C, 0x6C89B4, 0x6C897C);
 	return *wndptr;
 }
 
 void* SoundManager_Get()
 {
-	void** sndmgr_ptr = (void**)Choose(0x6c8590, 0x6c8550, 0x6c8550, 0x6c8588);
+	void** sndmgr_ptr = (void**)Choose(0x6C8590, 0x6C8550, 0x6C8588, 0x6C8550);
 	return *sndmgr_ptr;
 }
 
 void SoundManager_StopForMovie(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c2500, 0x4c2640, 0x4c28e0, 0x4c2630);
+	void* funcptr = Choose(0x4C2500, 0x4C28E0, 0x4C2630, 0x4C2640);
 	__asm
 	{
 		mov edi, sndmgr
@@ -67,7 +67,7 @@ void SoundManager_StopForMovie(void* sndmgr)
 
 void SoundManager_ResumeAfterMovie(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c2540, 0x4c2680, 0x4c2920, 0x4c2670);
+	void* funcptr = Choose(0x4C2540, 0x4C2920, 0x4C2670, 0x4C2680);
 	__asm
 	{
 		mov esi, sndmgr
@@ -77,7 +77,7 @@ void SoundManager_ResumeAfterMovie(void* sndmgr)
 
 bool SoundManager_IsStoppedForMovie(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c2570, 0x4c26b0, 0x4c2950, 0x4c26a0);
+	void* funcptr = Choose(0x4C2570, 0x4C2950, 0x4C26A0, 0x4C26B0);
 	int rv;
 	__asm
 	{
@@ -90,7 +90,7 @@ bool SoundManager_IsStoppedForMovie(void* sndmgr)
 
 void SoundManager_Update(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c18f0, 0x4c1a30, 0x4c1cd0, 0x4c1a20);
+	void* funcptr = Choose(0x4C18F0, 0x4C1CD0, 0x4C1A20, 0x4C1A30);
 	__asm
 	{
 		mov edi, sndmgr
@@ -105,7 +105,7 @@ void SoundManager_UpdateOncePerFrame(void* sndmgr, unsigned int elapsedTime, int
 	// contect (0xc)
 	// sndmgr
 	// eax = elapsedTime
-	void* funcptr = Choose(0x4c1940, 0x4c1a80, 0x4c1d20, 0x4c1a70);
+	void* funcptr = Choose(0x4C1940, 0x4C1D20, 0x4C1A70, 0x4C1A80);
 	int intIPFE = isPausedForErrors;
 	int intUC = useContext;
 	__asm
@@ -127,7 +127,7 @@ bool SoundManager_IsMuted(void* sndmgr)
 
 void* SoundTuner_Get()
 {
-	char** srmip = (char**)Choose(0x6c8554, 0x6c8514, 0x6c8514, 0x6c854c);
+	char** srmip = (char**)Choose(0x6C8554, 0x6C8514, 0x6C854C, 0x6C8514);
 	char* srmi = *srmip;
 	char** tuner = (char**)(srmi + 0x34);
 	return (void *)*tuner;
@@ -153,7 +153,7 @@ float SoundTuner_GetSfxVolume(void* tuner)
 
 void radMovieService2()
 {
-	void* funcptr = Choose(0x55e760, 0x55e810, 0x55ec50, 0x57dd90);
+	void* funcptr = Choose(0x55E760, 0x55EC50, 0x57DD90, 0x55E810);
 	__asm
 	{
 		call funcptr
@@ -162,7 +162,7 @@ void radMovieService2()
 
 void radFileService()
 {
-	void* funcptr = Choose(0x567ded, 0x567e2a, 0x568225, 0x578906);
+	void* funcptr = Choose(0x567DED, 0x568225, 0x578906, 0x567E2A);
 	__asm
 	{
 		call funcptr
