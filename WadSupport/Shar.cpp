@@ -21,7 +21,7 @@ void IdentifySharVersion()
 
 void* GetPlayFMV_Ptr()
 {
-	return Choose(0x465410, 0x4653d0, 0x4653d0, 0x46540);
+	return Choose(0x465410, 0x4654c0, 0x465180, 0x464f40);
 }
 
 void rad::FileOpenSync(rad::IRadFile** pFile, const char* pFileName, bool write, FileFlags flags, int priority, unsigned int cachesize, int allocator, int cacheSpace)
@@ -57,7 +57,7 @@ void* SoundManager_Get()
 
 void SoundManager_StopForMovie(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c2500, 0x4c24c0, 0x4c24c0, 0x4c24f8);
+	void* funcptr = Choose(0x4c2500, 0x4c2640, 0x4c28e0, 0x4c2630);
 	__asm
 	{
 		mov edi, sndmgr
@@ -67,7 +67,7 @@ void SoundManager_StopForMovie(void* sndmgr)
 
 void SoundManager_ResumeAfterMovie(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c2540, 0x4c2500, 0x4c2500, 0x4c2538);
+	void* funcptr = Choose(0x4c2540, 0x4c2680, 0x4c2920, 0x4c2670);
 	__asm
 	{
 		mov esi, sndmgr
@@ -77,7 +77,7 @@ void SoundManager_ResumeAfterMovie(void* sndmgr)
 
 bool SoundManager_IsStoppedForMovie(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c2570, 0x4c2530, 0x4c2530, 0x4c2568);
+	void* funcptr = Choose(0x4c2570, 0x4c26b0, 0x4c2950, 0x4c26a0);
 	int rv;
 	__asm
 	{
@@ -90,7 +90,7 @@ bool SoundManager_IsStoppedForMovie(void* sndmgr)
 
 void SoundManager_Update(void* sndmgr)
 {
-	void* funcptr = Choose(0x4c18f0, 0x4c18b0, 0x4c18b0, 0x4c18e8);
+	void* funcptr = Choose(0x4c18f0, 0x4c1a30, 0x4c1cd0, 0x4c1a20);
 	__asm
 	{
 		mov edi, sndmgr
@@ -105,7 +105,7 @@ void SoundManager_UpdateOncePerFrame(void* sndmgr, unsigned int elapsedTime, int
 	// contect (0xc)
 	// sndmgr
 	// eax = elapsedTime
-	void* funcptr = Choose(0x4c1940, 0x4c1900, 0x4c1900, 0x4c1938);
+	void* funcptr = Choose(0x4c1940, 0x4c1a80, 0x4c1d20, 0x4c1a70);
 	int intIPFE = isPausedForErrors;
 	int intUC = useContext;
 	__asm
@@ -153,7 +153,7 @@ float SoundTuner_GetSfxVolume(void* tuner)
 
 void radMovieService2()
 {
-	void* funcptr = Choose(0x55e760, 0x55e720, 0x55e720, 0x55e75);
+	void* funcptr = Choose(0x55e760, 0x55e810, 0x55ec50, 0x57dd90);
 	__asm
 	{
 		call funcptr
@@ -162,7 +162,7 @@ void radMovieService2()
 
 void radFileService()
 {
-	void* funcptr = Choose(0x567ded, 0x567dad, 0x567dad, 0x567de5);
+	void* funcptr = Choose(0x567ded, 0x567e2a, 0x568225, 0x578906);
 	__asm
 	{
 		call funcptr
